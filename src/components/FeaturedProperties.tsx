@@ -14,6 +14,14 @@ const FeaturedProperties = () => {
         setLoading(true);
         // Get a mix of featured and regular properties
         const allProperties = await getProperties();
+        
+        // If no properties returned (likely due to Supabase not being initialized), 
+        // show empty state instead of error
+        if (!allProperties || allProperties.length === 0) {
+          setProperties([]);
+          return;
+        }
+        
         const featuredProperties = allProperties.filter(p => p.featured);
         const regularProperties = allProperties.filter(p => !p.featured);
         
@@ -25,7 +33,8 @@ const FeaturedProperties = () => {
         
         setProperties(selectedProperties);
       } catch (error) {
-        console.error('Error fetching featured properties:', error);
+        console.warn('Error fetching featured properties:', error);
+        setProperties([]);
       } finally {
         setLoading(false);
       }
@@ -42,9 +51,15 @@ const FeaturedProperties = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Featured Properties
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Loading properties...
-            </p>
+            {properties.length === 0 ? (
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                No properties available. Please check your database connection.
+              </p>
+            ) : (
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Loading properties...
+              </p>
+            )}
           </div>
         </div>
       </section>
@@ -72,7 +87,7 @@ const FeaturedProperties = () => {
 
         {/* Properties Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {properties.map((property) => (
+          {properties.length > 0 ? properties.map((property) => (
             <PropertyCard 
               key={property.id} 
               id={property.id}
@@ -94,7 +109,16 @@ const FeaturedProperties = () => {
               agencyName={property.agency_name}
               agencyVerified={property.agency_verified}
             />
-          ))}
+          )) : !loading && (
+            <div className="col-span-full text-center py-12">
+              <p className="text-muted-foreground text-lg">
+                No featured properties available at the moment.
+              </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                Please ensure your database connection is properly configured.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Stats Section */}

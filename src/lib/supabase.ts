@@ -245,7 +245,7 @@ export async function updateUserProfile(userId: string, updates: Partial<UserPro
 export async function getProperties(type?: 'rental' | 'airbnb' | 'office', featured?: boolean) {
   const supabase = getSupabase();
   if (!supabase) {
-    console.error('Supabase client not initialized');
+    console.warn('Supabase client not initialized. Please check your environment variables.');
     return [];
   }
 
@@ -272,7 +272,7 @@ export async function getProperties(type?: 'rental' | 'airbnb' | 'office', featu
 export async function getMarketplaceItems() {
   const supabase = getSupabase();
   if (!supabase) {
-    console.error('Supabase client not initialized');
+    console.warn('Supabase client not initialized. Please check your environment variables.');
     return [];
   }
 
@@ -292,7 +292,7 @@ export async function getMarketplaceItems() {
 export async function getMovingServices() {
   const supabase = getSupabase();
   if (!supabase) {
-    console.error('Supabase client not initialized');
+    console.warn('Supabase client not initialized. Please check your environment variables.');
     return [];
   }
 
