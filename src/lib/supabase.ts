@@ -15,6 +15,8 @@ export function getSupabase(): SupabaseClient | null {
   return client;
 }
 
+export { client as supabase };
+
 // Database types
 export interface Property {
   id: string;
